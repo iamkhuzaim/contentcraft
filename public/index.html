@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ContentCraft - Discover thought-provoking stories, expert insights, and engaging content from talented writers worldwide.">
+    <title>ContentCraft - Discover Amazing Stories</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Professional Hero Section */
+        .hero-section {
+            padding: 5rem 0;
+            background: #f5f7fb; /* Slightly warmer, softer background */
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(79,70,229,0.03) 0%, rgba(79,70,229,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(124,58,237,0.03) 0%, rgba(124,58,237,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-content {
+            max-width: 600px;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #e9ecf5;
+            color: #4f46e5;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(79, 70, 229, 0.15);
+        }
+        
+        .hero-badge i {
+            font-size: 0.875rem;
+        }
+        
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero-title span {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-description {
+            font-size: 1.25rem;
+            line-height: 1.7;
+            color: #475569;
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+            font-weight: 400;
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        
+        .hero-btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+        }
+        
+        .hero-btn-primary {
+            background: #4f46e5;
+            color: white;
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.3);
+        }
+        
+        .hero-btn-primary:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(79, 70, 229, 0.4);
+        }
+        
+        .hero-btn-outline {
+            background: transparent;
+            color: #1e293b;
+            border: 1.5px solid #d0d5dd;
+        }
+        
+        .hero-btn-outline:hover {
+            background: #f8fafc;
+            border-color: #4f46e5;
+            color: #4f46e5;
+            transform: translateY(-2px);
+        }
+        
+        .hero-image {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            aspect-ratio: 4/3;
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.7s ease;
+        }
+        
+        .hero-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        .hero-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(124, 58, 237, 0.1));
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .hero-image:hover::after {
+            opacity: 1;
+        }
+        
+        /* Updated Stats Section - More Meaningful Metrics */
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 0;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.2;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+        
+        /* Trust indicators - subtle */
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #475569;
+            font-size: 0.875rem;
+        }
+        
+        .trust-item i {
+            color: #4f46e5;
+            font-size: 1rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 3.5rem;
+            }
+            
+            .hero-container {
+                gap: 3rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 3rem 0;
+            }
+            
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+                text-align: center;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+            }
+            
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .hero-actions {
+                justify-content: center;
+            }
+            
+            .hero-image {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            
+            .hero-stats {
+                justify-content: center;
+            }
+            
+            .trust-badge {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .hero-title {
+                font-size: 2.75rem;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+            }
+            
+            .hero-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: center;
+            }
+            
+            .trust-badge {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+        }
+        
+        /* Rest of your existing styles */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -0.02em;
+        }
+        
+        .section-description {
+            font-size: 1.125rem;
+            color: #475569;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Features Section */
+        .features-section {
+            padding: 6rem 0;
+            background: #ffffff;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            background: #f8fafc;
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 1px solid #edf2f7;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(79, 70, 229, 0.08);
+            background: #ffffff;
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #0f172a;
+        }
+        
+        .feature-card p {
+            color: #475569;
+            line-height: 1.6;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .cta-content h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .cta-content p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            color: #4f46e5;
+            padding: 1rem 3rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.125rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Blog Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .category-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            text-decoration: none;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 30px -10px rgba(79, 70, 229, 0.15);
+            border-color: #4f46e5;
+        }
+        
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .category-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+        
+        .category-count {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-pen-fancy"></i>
+                <span>ContentCraft</span>
+            </a>
+            
+            <ul class="navbar-nav" id="navbar-nav">
+                <li><a href="/" class="nav-link active">Home</a></li>
+                <li><a href="/blogs" class="nav-link">Blogs</a></li>
+                <li><a href="/categories" class="nav-link">Categories</a></li>
+                <li><a href="/search" class="nav-link">Search</a></li>
+                <li><a href="/about" class="nav-link">About</a></li>
+                <li><a href="/contact" class="nav-link">Contact</a></li>
+                <li><a href="/faq" class="nav-link">FAQ</a></li>
+            </ul>
+            
+            <div class="navbar-actions">
+                <div id="auth-links" style="display: flex; gap: 1rem;">
+                    <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+                    <a href="/signup" class="btn btn-primary btn-sm">Sign Up</a>
+                </div>
+                
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <div class="user-menu-trigger">
+                        <img src="" alt="User" class="user-avatar" id="user-avatar">
+                        <span id="user-name">User</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
+                    </div>
+                    <div class="user-dropdown">
+                        <a href="/dashboard" class="dropdown-item">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="/profile" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="/admin" class="dropdown-item admin-only" style="display: none;">
+                            <i class="fas fa-cog"></i> Admin Panel
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Professional Hero Section -->
+    <section class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-sparkles"></i>
+                    <span>Discover Great Content</span>
+                </div>
+                
+                <h1 class="hero-title">
+                    Stories That <span>Matter</span>
+                </h1>
+                
+                <p class="hero-description">
+                    Explore thousands of thought-provoking articles, expert insights, and engaging stories from talented writers around the world.
+                </p>
+                
+                <div class="hero-actions">
+                    <a href="/blogs" class="hero-btn hero-btn-primary">
+                        Start Reading
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="/categories" class="hero-btn hero-btn-outline">
+                        Browse Categories
+                    </a>
+                </div>
+                
+                <!-- Updated Stats - More Meaningful Metrics -->
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">5,000+</span>
+                        <span class="stat-label">Articles</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Writers</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">15+</span>
+                        <span class="stat-label">Categories</span>
+                    </div>
+                </div>
+                
+                <!-- Trust Badges -->
+                <div class="trust-badge">
+                    <div class="trust-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Curated Content</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Weekly Updates</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-users"></i>
+                        <span>Active Community</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1073&q=80" 
+                     alt="Professional writer working on content" 
+                     loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Blogs Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Stories</h2>
+                <p class="section-description">Handpicked articles that inspire, educate, and entertain</p>
+            </div>
+            <div class="blog-grid" id="featured-blogs">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            <div class="text-center mt-6">
+                <a href="/blogs" class="btn btn-primary btn-lg">
+                    View All Stories <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Readers Love ContentCraft</h2>
+                <p class="section-description">Discover what makes our platform the perfect place for your daily reading</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3>Curated Content</h3>
+                    <p>Every article is carefully selected to ensure quality, relevance, and value for our readers.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-compass"></i>
+                    </div>
+                    <h3>Diverse Topics</h3>
+                    <p>From technology to lifestyle, business to creativity - there's always something new to discover.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Fresh Daily</h3>
+                    <p>New articles added every day. You'll never run out of great content to read.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Read Anywhere</h3>
+                    <p>Optimized for all devices. Enjoy a seamless reading experience on phone, tablet, or desktop.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bookmark"></i>
+                    </div>
+                    <h3>Save for Later</h3>
+                    <p>Bookmark your favorite articles and build your personal reading list.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Community Driven</h3>
+                    <p>Join discussions, share insights, and connect with like-minded readers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="section" style="background: #f8fafc;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Explore Categories</h2>
+                <p class="section-description">Find content that matches your interests</p>
+            </div>
+            <div class="category-grid" id="categories">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Blogs Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Fresh From the Community</h2>
+                <p class="section-description">Latest stories from our talented writers</p>
+            </div>
+            <div class="blog-grid" id="latest-blogs">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Never Miss a Story</h2>
+                <p>Subscribe to our newsletter and get the best content delivered straight to your inbox.</p>
+                <form id="newsletter-form" style="display: flex; gap: 1rem; max-width: 500px; margin: 0 auto;">
+                    <input type="email" placeholder="Enter your email" class="form-input" style="flex: 1; border: none; padding: 1rem 1.5rem; border-radius: 12px; font-size: 1rem; background: rgba(255,255,255,0.95);" required>
+                    <button type="submit" class="cta-btn" style="padding: 1rem 2rem; background: white; color: #4f46e5; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="footer-logo">
+                        <i class="fas fa-pen-fancy"></i>
+                        <span>ContentCraft</span>
+                    </a>
+                    <p class="footer-description">
+                        Discover thought-provoking stories, expert insights, and engaging content from talented writers worldwide.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/blogs">All Stories</a></li>
+                        <li><a href="/categories">Categories</a></li>
+                        <li><a href="/search">Search</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                        <li><a href="/contact">Help Center</a></li>
+                        <li><a href="/contact">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    &copy; 2024 ContentCraft. All rights reserved. Made with <i class="fas fa-heart" style="color: #f43f5e;"></i> for readers.
+                </p>
+                <div class="footer-legal">
+                    <a href="/privacy">Privacy</a>
+                    <a href="/terms">Terms</a>
+                    <a href="/cookies">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+        // Load featured blogs
+        async function loadFeaturedBlogs() {
+            const container = document.getElementById('featured-blogs');
+            try {
+                const response = await fetch('/api/blogs/featured/list?limit=6');
+                const data = await response.json();
+
+                if (data.success && data.data.blogs.length > 0) {
+                    container.innerHTML = data.data.blogs.map(blog => window.ContentCraft.BlogCard.render(blog)).join('');
+                } else {
+                    window.ContentCraft.UI.showEmpty(container, 'No Featured Stories', 'Check back later for featured content.');
+                }
+            } catch (error) {
+                window.ContentCraft.UI.showError(container, 'Failed to load featured stories.');
+            }
+        }
+
+        // Load latest blogs
+        async function loadLatestBlogs() {
+            const container = document.getElementById('latest-blogs');
+            try {
+                const response = await fetch('/api/blogs/latest/list?limit=6');
+                const data = await response.json();
+
+                if (data.success && data.data.blogs.length > 0) {
+                    container.innerHTML = data.data.blogs.map(blog => window.ContentCraft.BlogCard.render(blog)).join('');
+                } else {
+                    window.ContentCraft.UI.showEmpty(container, 'No Stories Yet', 'Be the first to read a story!');
+                }
+            } catch (error) {
+                window.ContentCraft.UI.showError(container, 'Failed to load latest stories.');
+            }
+        }
+
+        // Load categories
+        async function loadCategories() {
+            const container = document.getElementById('categories');
+            try {
+                const response = await fetch('/api/categories');
+                const data = await response.json();
+
+                if (data.success && data.data.categories.length > 0) {
+                    container.innerHTML = data.data.categories.map(cat => `
+                        <a href="/blogs?category=${cat.id}" class="category-card">
+                            <div class="category-icon">
+                                <i class="fas ${cat.icon || 'fa-folder'}"></i>
+                            </div>
+                            <h3 class="category-name">${cat.name}</h3>
+                            <p class="category-count">${cat.blog_count} stories</p>
+                        </a>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p class="text-center text-secondary">No categories found.</p>';
+                }
+            } catch (error) {
+                container.innerHTML = '<p class="text-center text-secondary">Failed to load categories.</p>';
+            }
+        }
+
+        // Newsletter form
+        document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = e.target.querySelector('input').value;
+            
+            try {
+                const response = await fetch('/api/newsletter/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    window.ContentCraft.Toast.success('Subscribed successfully!');
+                    e.target.reset();
+                } else {
+                    window.ContentCraft.Toast.error(data.message || 'Subscription failed');
+                }
+            } catch (error) {
+                window.ContentCraft.Toast.error('Failed to subscribe');
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFeaturedBlogs();
+            loadLatestBlogs();
+            loadCategories();
+
+            if (window.ContentCraft.Auth.isAdmin()) {
+                document.querySelectorAll('.admin-only').forEach(el => {
+                    el.style.display = 'flex';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions - ContentCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .faq-page {
+            padding: 2rem 0 4rem;
+        }
+        
+        .faq-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .faq-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .faq-header p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+        }
+        
+        .faq-categories {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .faq-category-btn {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-full);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-weight: 500;
+        }
+        
+        .faq-category-btn:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .faq-category-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all var(--transition-fast);
+        }
+        
+        .faq-item:hover {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: background var(--transition-fast);
+        }
+        
+        .faq-question:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .faq-question i {
+            transition: transform var(--transition-fast);
+            color: var(--primary-color);
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all var(--transition-fast);
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 500px;
+        }
+        
+        .faq-answer p {
+            margin-bottom: 1rem;
+        }
+        
+        .faq-answer ul, .faq-answer ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .faq-answer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .faq-answer a:hover {
+            text-decoration: underline;
+        }
+        
+        .faq-empty {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+        
+        .faq-contact {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+        }
+        
+        .faq-contact h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .faq-contact p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-pen-fancy"></i>
+                <span>ContentCraft</span>
+            </a>
+            
+            <ul class="navbar-nav" id="navbar-nav">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/blogs" class="nav-link">Blogs</a></li>
+                <li><a href="/categories" class="nav-link">Categories</a></li>
+                <li><a href="/search" class="nav-link">Search</a></li>
+                <li><a href="/about" class="nav-link">About</a></li>
+                <li><a href="/contact" class="nav-link">Contact</a></li>
+                <li><a href="/faq" class="nav-link active">FAQ</a></li>
+            </ul>
+            
+            <div class="navbar-actions">
+                <div id="auth-links" style="display: flex; gap: 1rem;">
+                    <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+                    <a href="/signup" class="btn btn-primary btn-sm">Sign Up</a>
+                </div>
+                
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <div class="user-menu-trigger">
+                        <img src="" alt="User" class="user-avatar" id="user-avatar">
+                        <span id="user-name">User</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
+                    </div>
+                    <div class="user-dropdown">
+                        <a href="/dashboard" class="dropdown-item">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="/profile" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="/admin" class="dropdown-item admin-only" style="display: none;">
+                            <i class="fas fa-cog"></i> Admin Panel
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="faq-page">
+        <div class="container">
+            <div class="faq-header">
+                <h1>Frequently Asked Questions</h1>
+                <p>Find answers to common questions about ContentCraft</p>
+            </div>
+            
+            <div class="faq-categories" id="faq-categories">
+                <button class="faq-category-btn active" data-category="all">All</button>
+            </div>
+            
+            <div class="faq-list" id="faq-list">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            
+            <div class="faq-contact">
+                <h3>Still Have Questions?</h3>
+                <p>Can't find the answer you're looking for? Please reach out to our support team.</p>
+                <a href="/contact" class="btn btn-primary">
+                    <i class="fas fa-envelope"></i> Contact Us
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="footer-logo">
+                        <i class="fas fa-pen-fancy"></i>
+                        <span>ContentCraft</span>
+                    </a>
+                    <p class="footer-description">
+                        A modern platform where creators craft stories that matter. Join our community of passionate writers and readers.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/blogs">All Stories</a></li>
+                        <li><a href="/categories">Categories</a></li>
+                        <li><a href="/search">Search</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                        <li><a href="/contact">Help Center</a></li>
+                        <li><a href="/contact">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    &copy; 2024 ContentCraft. All rights reserved. Made with <i class="fas fa-heart" style="color: #f43f5e;"></i> for creators.
+                </p>
+                <div class="footer-legal">
+                    <a href="/privacy">Privacy</a>
+                    <a href="/terms">Terms</a>
+                    <a href="/cookies">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentCategory = 'all';
+            let faqData = [];
+            
+            // Load FAQs
+            async function loadFAQs(category = 'all') {
+                const container = document.getElementById('faq-list');
+                container.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+                
+                try {
+                    const url = category !== 'all' ? `/api/faq?category=${category}` : '/api/faq';
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        faqData = data.data.faqs;
+                        renderFAQs(faqData);
+                        renderCategories(data.data.categories);
+                    } else {
+                        container.innerHTML = '<div class="faq-empty">Failed to load FAQs</div>';
+                    }
+                } catch (error) {
+                    container.innerHTML = '<div class="faq-empty">Failed to load FAQs</div>';
+                }
+            }
+            
+            // Render FAQs
+            function renderFAQs(faqs) {
+                const container = document.getElementById('faq-list');
+                
+                if (faqs.length === 0) {
+                    container.innerHTML = '<div class="faq-empty">No FAQs found in this category</div>';
+                    return;
+                }
+                
+                container.innerHTML = faqs.map((faq, index) => `
+                    <div class="faq-item" data-id="${faq.id}">
+                        <div class="faq-question" onclick="toggleFAQ(${index})">
+                            ${faq.question}
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            ${faq.answer}
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Render category buttons
+            function renderCategories(categories) {
+                const container = document.getElementById('faq-categories');
+                let html = '<button class="faq-category-btn active" data-category="all">All</button>';
+                
+                categories.forEach(cat => {
+                    html += `<button class="faq-category-btn" data-category="${cat}">${cat.charAt(0).toUpperCase() + cat.slice(1)}</button>`;
+                });
+                
+                container.innerHTML = html;
+                
+                // Add event listeners to category buttons
+                document.querySelectorAll('.faq-category-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.faq-category-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        currentCategory = btn.dataset.category;
+                        loadFAQs(currentCategory);
+                    });
+                });
+            }
+            
+            // Toggle FAQ answer
+            window.toggleFAQ = function(index) {
+                const items = document.querySelectorAll('.faq-item');
+                const item = items[index];
+                
+                // Close other FAQs
+                items.forEach((i, idx) => {
+                    if (idx !== index && i.classList.contains('active')) {
+                        i.classList.remove('active');
+                    }
+                });
+                
+                // Toggle current
+                item.classList.toggle('active');
+            };
+            
+            // Load initial FAQs
+            loadFAQs();
+        });
+    </script>
+</body>
+</html>

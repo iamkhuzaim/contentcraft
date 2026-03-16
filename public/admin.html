@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ContentCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .admin-page {
+            padding: 2rem 0 4rem;
+        }
+        
+        .admin-header {
+            margin-bottom: 2rem;
+        }
+        
+        .admin-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .admin-header p {
+            color: var(--text-secondary);
+        }
+        
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+        
+        .admin-sidebar {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            height: fit-content;
+        }
+        
+        .admin-nav {
+            list-style: none;
+        }
+        
+        .admin-nav li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .admin-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+        
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .admin-nav a i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .admin-content {
+            min-height: 500px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all var(--transition-fast);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .stat-icon.blue { background: #dbeafe; color: #2563eb; }
+        .stat-icon.green { background: #d1fae5; color: #059669; }
+        .stat-icon.purple { background: #ede9fe; color: #7c3aed; }
+        .stat-icon.orange { background: #ffedd5; color: #ea580c; }
+        .stat-icon.red { background: #fee2e2; color: #dc2626; }
+        
+        .stat-content h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .stat-content p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .admin-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .admin-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .admin-card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .admin-card-link {
+            font-size: 0.875rem;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .admin-card-link:hover {
+            text-decoration: underline;
+        }
+        
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            transition: all var(--transition-fast);
+        }
+        
+        .list-item:hover {
+            background: var(--border-color);
+        }
+        
+        .list-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .list-item-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            object-fit: cover;
+        }
+        
+        .list-item-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .list-item-content h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .list-item-content p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .list-item-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        @media (max-width: 768px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-pen-fancy"></i>
+                <span>ContentCraft</span>
+            </a>
+            
+            <ul class="navbar-nav" id="navbar-nav">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/blogs" class="nav-link">Blogs</a></li>
+                <li><a href="/categories" class="nav-link">Categories</a></li>
+                <li><a href="/search" class="nav-link">Search</a></li>
+                <li><a href="/about" class="nav-link">About</a></li>
+                <li><a href="/contact" class="nav-link">Contact</a></li>
+                <li><a href="/faq" class="nav-link">FAQ</a></li>
+            </ul>
+            
+            <div class="navbar-actions">
+                <div id="auth-links" style="display: flex; gap: 1rem;">
+                    <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+                    <a href="/signup" class="btn btn-primary btn-sm">Sign Up</a>
+                </div>
+                
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <div class="user-menu-trigger">
+                        <img src="" alt="User" class="user-avatar" id="user-avatar">
+                        <span id="user-name">User</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
+                    </div>
+                    <div class="user-dropdown">
+                        <a href="/dashboard" class="dropdown-item">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="/profile" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="/admin" class="dropdown-item admin-only" style="display: none;">
+                            <i class="fas fa-cog"></i> Admin Panel
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="admin-page">
+        <div class="container">
+            <div class="admin-header">
+                <h1><i class="fas fa-cog"></i> Admin Dashboard</h1>
+                <p>Manage your content platform</p>
+            </div>
+            
+            <div class="admin-grid">
+                <aside class="admin-sidebar">
+                    <ul class="admin-nav">
+                        <li><a href="/admin" class="active"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                        <li><a href="/admin/blogs"><i class="fas fa-file-alt"></i> Blog Manager</a></li>
+                        <li><a href="/admin/users"><i class="fas fa-users"></i> User Manager</a></li>
+                        <li><a href="/admin/messages"><i class="fas fa-envelope"></i> Messages</a></li>
+                        <li><a href="/admin/settings"><i class="fas fa-sliders-h"></i> Settings</a></li>
+                        <li><a href="/profile"><i class="fas fa-user"></i> My Profile</a></li>
+                    </ul>
+                </aside>
+                
+                <div class="admin-content">
+                    <!-- Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon blue">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="stat-users">0</h3>
+                                <p>Total Users</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="stat-blogs">0</h3>
+                                <p>Total Blogs</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="stat-comments">0</h3>
+                                <p>Comments</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon orange">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="stat-messages">0</h3>
+                                <p>Unread Messages</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon red">
+                                <i class="fas fa-folder"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="stat-categories">0</h3>
+                                <p>Categories</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Blogs -->
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3 class="admin-card-title">Recent Blogs</h3>
+                            <a href="/admin/blogs" class="admin-card-link">View All</a>
+                        </div>
+                        <div id="recent-blogs">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Popular Blogs -->
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3 class="admin-card-title">Popular Blogs</h3>
+                            <a href="/admin/blogs" class="admin-card-link">View All</a>
+                        </div>
+                        <div id="popular-blogs">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Users -->
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3 class="admin-card-title">Recent Users</h3>
+                            <a href="/admin/users" class="admin-card-link">View All</a>
+                        </div>
+                        <div id="recent-users">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="footer-logo">
+                        <i class="fas fa-pen-fancy"></i>
+                        <span>ContentCraft</span>
+                    </a>
+                    <p class="footer-description">
+                        A modern platform where creators craft stories that matter. Join our community of passionate writers and readers.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/blogs">All Stories</a></li>
+                        <li><a href="/categories">Categories</a></li>
+                        <li><a href="/search">Search</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                        <li><a href="/contact">Help Center</a></li>
+                        <li><a href="/contact">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    &copy; 2024 ContentCraft. All rights reserved. Made with <i class="fas fa-heart" style="color: #f43f5e;"></i> for creators.
+                </p>
+                <div class="footer-legal">
+                    <a href="/privacy">Privacy</a>
+                    <a href="/terms">Terms</a>
+                    <a href="/cookies">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get global objects
+            const Auth = window.ContentCraft ? window.ContentCraft.Auth : window.Auth;
+            const API = window.ContentCraft ? window.ContentCraft.API : window.API;
+            const Toast = window.ContentCraft ? window.ContentCraft.Toast : window.Toast;
+            const Avatar = window.ContentCraft ? window.ContentCraft.Avatar : window.Avatar;
+            
+            // Require admin
+            if (!Auth.requireAdmin()) return;
+            
+            // Load dashboard data
+            async function loadDashboard() {
+                try {
+                    console.log('Loading admin dashboard...');
+                    
+                    const response = await fetch('/api/admin/dashboard', {
+                        headers: {
+                            'Authorization': `Bearer ${Auth.getToken()}`
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    console.log('Dashboard data:', data);
+                    
+                    if (data && data.success) {
+                        // Update stats
+                        if (data.data.stats) {
+                            document.getElementById('stat-users').textContent = data.data.stats.total_users || 0;
+                            document.getElementById('stat-blogs').textContent = data.data.stats.total_blogs || 0;
+                            document.getElementById('stat-comments').textContent = data.data.stats.total_comments || 0;
+                            document.getElementById('stat-messages').textContent = data.data.stats.unread_messages || 0;
+                            document.getElementById('stat-categories').textContent = data.data.stats.total_categories || 0;
+                        }
+                        
+                        // Recent blogs
+                        if (data.data.recent_blogs) {
+                            renderBlogs(data.data.recent_blogs, 'recent-blogs');
+                        } else {
+                            document.getElementById('recent-blogs').innerHTML = '<p class="text-center text-secondary">No recent blogs</p>';
+                        }
+                        
+                        // Popular blogs
+                        if (data.data.popular_blogs) {
+                            renderBlogs(data.data.popular_blogs, 'popular-blogs');
+                        } else {
+                            document.getElementById('popular-blogs').innerHTML = '<p class="text-center text-secondary">No popular blogs</p>';
+                        }
+                        
+                        // Recent users
+                        if (data.data.recent_users) {
+                            renderUsers(data.data.recent_users);
+                        } else {
+                            document.getElementById('recent-users').innerHTML = '<p class="text-center text-secondary">No recent users</p>';
+                        }
+                    } else {
+                        console.error('Failed to load dashboard:', data?.message);
+                        if (Toast) Toast.error('Failed to load dashboard data');
+                        
+                        // Show error in containers
+                        document.getElementById('recent-blogs').innerHTML = '<p class="text-center text-error">Failed to load</p>';
+                        document.getElementById('popular-blogs').innerHTML = '<p class="text-center text-error">Failed to load</p>';
+                        document.getElementById('recent-users').innerHTML = '<p class="text-center text-error">Failed to load</p>';
+                    }
+                } catch (error) {
+                    console.error('Failed to load dashboard:', error);
+                    if (Toast) Toast.error('Failed to load dashboard data');
+                    
+                    // Show error in containers
+                    document.getElementById('recent-blogs').innerHTML = '<p class="text-center text-error">Failed to load</p>';
+                    document.getElementById('popular-blogs').innerHTML = '<p class="text-center text-error">Failed to load</p>';
+                    document.getElementById('recent-users').innerHTML = '<p class="text-center text-error">Failed to load</p>';
+                }
+            }
+            
+            function renderBlogs(blogs, containerId) {
+                const container = document.getElementById(containerId);
+                
+                if (!blogs || blogs.length === 0) {
+                    container.innerHTML = '<p class="text-center text-secondary">No blogs yet</p>';
+                    return;
+                }
+                
+                container.innerHTML = blogs.map(blog => `
+                    <div class="list-item">
+                        <div class="list-item-content">
+                            <h4>${escapeHtml(blog.title || 'Untitled')}</h4>
+                            <p>by ${escapeHtml(blog.author_name || 'Unknown')}</p>
+                        </div>
+                        <span class="list-item-meta">
+                            <i class="fas fa-eye"></i> ${blog.views || 0}
+                        </span>
+                    </div>
+                `).join('');
+            }
+            
+            function renderUsers(users) {
+                const container = document.getElementById('recent-users');
+                
+                if (!users || users.length === 0) {
+                    container.innerHTML = '<p class="text-center text-secondary">No users yet</p>';
+                    return;
+                }
+                
+                container.innerHTML = users.map(user => `
+                    <div class="list-item">
+                        <img src="${user.avatar_url || (Avatar ? Avatar.generate(user.name) : '')}" 
+                             alt="${escapeHtml(user.name)}" 
+                             class="list-item-avatar"
+                             onerror="this.src='${Avatar ? Avatar.generate(user.name) : ''}'">
+                        <div class="list-item-content">
+                            <h4>${escapeHtml(user.name)}</h4>
+                            <p>${escapeHtml(user.email)}</p>
+                        </div>
+                        <span class="list-item-meta">${user.role || 'user'}</span>
+                    </div>
+                `).join('');
+            }
+            
+            // Helper function to escape HTML
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+            
+            // Load dashboard data
+            loadDashboard();
+        });
+    </script>
+</body>
+</html>

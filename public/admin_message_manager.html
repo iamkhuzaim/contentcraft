@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - ContentCraft Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .admin-page {
+            padding: 2rem 0 4rem;
+        }
+        
+        .admin-header {
+            margin-bottom: 2rem;
+        }
+        
+        .admin-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .admin-header p {
+            color: var(--text-secondary);
+        }
+        
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+        
+        .admin-sidebar {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            height: fit-content;
+        }
+        
+        .admin-nav {
+            list-style: none;
+        }
+        
+        .admin-nav li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .admin-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+        
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .admin-nav a i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .admin-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .filter-tab {
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-full);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-weight: 500;
+        }
+        
+        .filter-tab:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .filter-tab.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .messages-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .message-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            transition: all var(--transition-fast);
+        }
+        
+        .message-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .message-card.unread {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .message-sender h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .message-sender p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .message-meta {
+            text-align: right;
+        }
+        
+        .message-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        .message-status {
+            display: inline-block;
+            padding: 0.125rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+        
+        .status-unread {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .status-read {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        
+        .message-body {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
+        
+        .message-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .message-actions button {
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-mark-read {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .btn-mark-read:hover {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+        
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .pagination-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-pen-fancy"></i>
+                <span>ContentCraft</span>
+            </a>
+            
+            <ul class="navbar-nav" id="navbar-nav">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/blogs" class="nav-link">Blogs</a></li>
+                <li><a href="/categories" class="nav-link">Categories</a></li>
+                <li><a href="/search" class="nav-link">Search</a></li>
+                <li><a href="/about" class="nav-link">About</a></li>
+                <li><a href="/contact" class="nav-link">Contact</a></li>
+                <li><a href="/faq" class="nav-link">FAQ</a></li>
+            </ul>
+            
+            <div class="navbar-actions">
+                <div id="auth-links" style="display: flex; gap: 1rem;">
+                    <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+                    <a href="/signup" class="btn btn-primary btn-sm">Sign Up</a>
+                </div>
+                
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <div class="user-menu-trigger">
+                        <img src="" alt="User" class="user-avatar" id="user-avatar">
+                        <span id="user-name">User</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
+                    </div>
+                    <div class="user-dropdown">
+                        <a href="/dashboard" class="dropdown-item">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="/profile" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="/admin" class="dropdown-item admin-only" style="display: none;">
+                            <i class="fas fa-cog"></i> Admin Panel
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="admin-page">
+        <div class="container">
+            <div class="admin-header">
+                <h1><i class="fas fa-envelope"></i> Messages</h1>
+                <p>View and manage contact form submissions</p>
+            </div>
+            
+            <div class="admin-grid">
+                <aside class="admin-sidebar">
+                    <ul class="admin-nav">
+                        <li><a href="/admin"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                        <li><a href="/admin/blogs"><i class="fas fa-file-alt"></i> Blog Manager</a></li>
+                        <li><a href="/admin/users"><i class="fas fa-users"></i> User Manager</a></li>
+                        <li><a href="/admin/messages" class="active"><i class="fas fa-envelope"></i> Messages</a></li>
+                        <li><a href="/admin/settings"><i class="fas fa-sliders-h"></i> Settings</a></li>
+                        <li><a href="/profile"><i class="fas fa-user"></i> My Profile</a></li>
+                    </ul>
+                </aside>
+                
+                <div class="admin-content">
+                    <div class="admin-toolbar">
+                        <div class="filter-tabs">
+                            <button class="filter-tab active" data-filter="all">All Messages</button>
+                            <button class="filter-tab" data-filter="unread">Unread</button>
+                        </div>
+                    </div>
+                    
+                    <div class="messages-list" id="messages-list">
+                        <div class="loading"><div class="spinner"></div></div>
+                    </div>
+                    
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="footer-logo">
+                        <i class="fas fa-pen-fancy"></i>
+                        <span>ContentCraft</span>
+                    </a>
+                    <p class="footer-description">
+                        A modern platform where creators craft stories that matter. Join our community of passionate writers and readers.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/blogs">All Stories</a></li>
+                        <li><a href="/categories">Categories</a></li>
+                        <li><a href="/search">Search</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                        <li><a href="/contact">Help Center</a></li>
+                        <li><a href="/contact">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    &copy; 2024 ContentCraft. All rights reserved. Made with <i class="fas fa-heart" style="color: #f43f5e;"></i> for creators.
+                </p>
+                <div class="footer-legal">
+                    <a href="/privacy">Privacy</a>
+                    <a href="/terms">Terms</a>
+                    <a href="/cookies">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!window.ContentCraft.Auth.requireAdmin()) return;
+            let currentPage = 1;
+            let currentFilter = 'all';
+            
+            async function loadMessages(page = 1, filter = 'all') {
+                const container = document.getElementById('messages-list');
+                container.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+                try {
+                    let url = `/api/messages?page=${page}&limit=10`;
+                    if (filter === 'unread') url += '&unread=true';
+                    const data = await window.ContentCraft.API.get(url);
+                    if (data && data.success) {
+                        renderMessages(data.data.messages);
+                        renderPagination(data.data.pagination);
+                    }
+                } catch (error) { 
+                    container.innerHTML = '<p class="text-center text-error">Failed to load messages</p>'; 
+                }
+            }
+            
+            function renderMessages(messages) {
+                const container = document.getElementById('messages-list');
+                if (messages.length === 0) { 
+                    container.innerHTML = '<p class="text-center text-secondary">No messages found</p>'; 
+                    return; 
+                }
+                container.innerHTML = messages.map(msg => `
+                    <div class="message-card ${!msg.is_read ? 'unread' : ''}">
+                        <div class="message-header">
+                            <div class="message-sender">
+                                <h4>${msg.name}</h4>
+                                <p><i class="fas fa-envelope"></i> ${msg.email}${msg.phone ? ` | <i class="fas fa-phone"></i> ${msg.phone}` : ''}</p>
+                            </div>
+                            <div class="message-meta">
+                                <div class="message-time">${window.ContentCraft.UI.formatDate(msg.created_at)}</div>
+                                <span class="message-status ${msg.is_read ? 'status-read' : 'status-unread'}">${msg.is_read ? 'Read' : 'Unread'}</span>
+                            </div>
+                        </div>
+                        <div class="message-body">${escapeHtml(msg.message)}</div>
+                        <div class="message-actions">
+                            ${!msg.is_read ? `<button class="btn-mark-read" onclick="markAsRead(${msg.id})"><i class="fas fa-check"></i> Mark as Read</button>` : ''}
+                            <button class="btn-delete" onclick="deleteMessage(${msg.id})"><i class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            function renderPagination(pagination) {
+                const container = document.getElementById('pagination');
+                if (pagination.total_pages <= 1) { container.innerHTML = ''; return; }
+                let html = `<button class="pagination-btn" ${!pagination.has_prev ? 'disabled' : ''} onclick="changePage(${pagination.current_page - 1})"><i class="fas fa-chevron-left"></i></button>`;
+                for (let i = 1; i <= pagination.total_pages; i++) {
+                    if (i === pagination.current_page) html += `<button class="pagination-btn active">${i}</button>`;
+                    else if (i === 1 || i === pagination.total_pages || Math.abs(i - pagination.current_page) <= 1) html += `<button class="pagination-btn" onclick="changePage(${i})">${i}</button>`;
+                    else if (Math.abs(i - pagination.current_page) === 2) html += `<span style="color: var(--text-muted);">...</span>`;
+                }
+                html += `<button class="pagination-btn" ${!pagination.has_next ? 'disabled' : ''} onclick="changePage(${pagination.current_page + 1})"><i class="fas fa-chevron-right"></i></button>`;
+                container.innerHTML = html;
+            }
+            
+            window.changePage = function(page) { 
+                currentPage = page; 
+                loadMessages(page, currentFilter); 
+            };
+            
+            window.markAsRead = async function(messageId) {
+                try {
+                    const response = await fetch(`/api/messages/${messageId}/read`, {
+                        method: 'PATCH',
+                        headers: { 'Authorization': `Bearer ${window.ContentCraft.Auth.getToken()}` }
+                    });
+                    const data = await response.json();
+                    if (data.success) { 
+                        window.ContentCraft.Toast.success('Marked as read'); 
+                        loadMessages(currentPage, currentFilter); 
+                    } else { 
+                        window.ContentCraft.Toast.error(data.message || 'Failed to mark as read'); 
+                    }
+                } catch (error) { 
+                    window.ContentCraft.Toast.error('Failed to mark as read'); 
+                }
+            };
+            
+            window.deleteMessage = async function(messageId) {
+                if (!confirm('Are you sure you want to delete this message?')) return;
+                try {
+                    const data = await window.ContentCraft.API.delete(`/api/messages/${messageId}`);
+                    if (data && data.success) { 
+                        window.ContentCraft.Toast.success('Message deleted'); 
+                        loadMessages(currentPage, currentFilter); 
+                    } else { 
+                        window.ContentCraft.Toast.error(data?.message || 'Failed to delete message'); 
+                    }
+                } catch (error) { 
+                    window.ContentCraft.Toast.error('Failed to delete message'); 
+                }
+            };
+            
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentFilter = tab.dataset.filter;
+                    currentPage = 1;
+                    loadMessages(1, currentFilter);
+                });
+            });
+            
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+            
+            loadMessages();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - ContentCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .search-page {
+            padding: 2rem 0 4rem;
+        }
+        
+        .search-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .search-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-full);
+            font-size: 1rem;
+            transition: all var(--transition-fast);
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        .search-box button {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0.625rem 1.5rem;
+            border-radius: var(--radius-full);
+        }
+        
+        .search-results-info {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .search-highlight {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+        
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .pagination-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-box button {
+                position: static;
+                width: 100%;
+                margin-top: 1rem;
+                transform: none;
+            }
+            
+            .search-box i {
+                display: none;
+            }
+            
+            .search-box input {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-pen-fancy"></i>
+                <span>ContentCraft</span>
+            </a>
+            
+            <ul class="navbar-nav" id="navbar-nav">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/blogs" class="nav-link">Blogs</a></li>
+                <li><a href="/categories" class="nav-link">Categories</a></li>
+                <li><a href="/search" class="nav-link active">Search</a></li>
+                <li><a href="/about" class="nav-link">About</a></li>
+                <li><a href="/contact" class="nav-link">Contact</a></li>
+                <li><a href="/faq" class="nav-link">FAQ</a></li>
+            </ul>
+            
+            <div class="navbar-actions">
+                <div id="auth-links" style="display: flex; gap: 1rem;">
+                    <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+                    <a href="/signup" class="btn btn-primary btn-sm">Sign Up</a>
+                </div>
+                
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <div class="user-menu-trigger">
+                        <img src="" alt="User" class="user-avatar" id="user-avatar">
+                        <span id="user-name">User</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
+                    </div>
+                    <div class="user-dropdown">
+                        <a href="/dashboard" class="dropdown-item">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="/profile" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="/admin" class="dropdown-item admin-only" style="display: none;">
+                            <i class="fas fa-cog"></i> Admin Panel
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="search-page">
+        <div class="container">
+            <div class="search-header">
+                <h1>Search Stories</h1>
+            </div>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder="Search for stories, topics, or authors..." autocomplete="off">
+                <button class="btn btn-primary" id="search-btn">Search</button>
+            </div>
+            
+            <div class="search-results-info" id="results-info"></div>
+            
+            <div class="blog-grid" id="search-results">
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                    <div class="empty-state-icon"><i class="fas fa-search"></i></div>
+                    <h3 class="empty-state-title">Start Searching</h3>
+                    <p class="empty-state-description">Enter a keyword to find amazing stories</p>
+                </div>
+            </div>
+            
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="footer-logo">
+                        <i class="fas fa-pen-fancy"></i>
+                        <span>ContentCraft</span>
+                    </a>
+                    <p class="footer-description">
+                        A modern platform where creators craft stories that matter. Join our community of passionate writers and readers.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/blogs">All Stories</a></li>
+                        <li><a href="/categories">Categories</a></li>
+                        <li><a href="/search">Search</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                        <li><a href="/contact">Help Center</a></li>
+                        <li><a href="/contact">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    &copy; 2024 ContentCraft. All rights reserved. Made with <i class="fas fa-heart" style="color: #f43f5e;"></i> for creators.
+                </p>
+                <div class="footer-legal">
+                    <a href="/privacy">Privacy</a>
+                    <a href="/terms">Terms</a>
+                    <a href="/cookies">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentPage = 1;
+            let currentQuery = '';
+            
+            const searchInput = document.getElementById('search-input');
+            const searchBtn = document.getElementById('search-btn');
+            const resultsContainer = document.getElementById('search-results');
+            const resultsInfo = document.getElementById('results-info');
+            
+            // Check URL for query param
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialQuery = urlParams.get('q');
+            if (initialQuery) {
+                searchInput.value = initialQuery;
+                performSearch(initialQuery);
+            }
+            
+            // Search button click
+            searchBtn.addEventListener('click', () => {
+                const query = searchInput.value.trim();
+                if (query) {
+                    currentPage = 1;
+                    performSearch(query);
+                }
+            });
+            
+            // Enter key search
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const query = searchInput.value.trim();
+                    if (query) {
+                        currentPage = 1;
+                        performSearch(query);
+                    }
+                }
+            });
+            
+            async function performSearch(query, page = 1) {
+                currentQuery = query;
+                resultsContainer.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+                resultsInfo.textContent = '';
+                
+                try {
+                    const response = await fetch(`/api/search?q=${encodeURIComponent(query)}&page=${page}&limit=12`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        if (data.data.blogs.length > 0) {
+                            resultsContainer.innerHTML = data.data.blogs.map(blog => window.ContentCraft.BlogCard.render(blog)).join('');
+                            resultsInfo.innerHTML = `Found <span class="search-highlight">${data.data.pagination.total_items}</span> result${data.data.pagination.total_items !== 1 ? 's' : ''} for "<span class="search-highlight">${data.data.query}</span>"`;
+                            renderPagination(data.data.pagination);
+                        } else {
+                            resultsContainer.innerHTML = `
+                                <div class="empty-state" style="grid-column: 1 / -1;">
+                                    <div class="empty-state-icon"><i class="fas fa-search"></i></div>
+                                    <h3 class="empty-state-title">No Results Found</h3>
+                                    <p class="empty-state-description">Try different keywords or check your spelling</p>
+                                </div>
+                            `;
+                            document.getElementById('pagination').innerHTML = '';
+                        }
+                        
+                        // Update URL
+                        window.history.replaceState({}, '', `?q=${encodeURIComponent(query)}`);
+                    } else {
+                        resultsContainer.innerHTML = `
+                            <div class="error-state" style="grid-column: 1 / -1;">
+                                <p>${data.message || 'Search failed'}</p>
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    resultsContainer.innerHTML = `
+                        <div class="error-state" style="grid-column: 1 / -1;">
+                            <p>Search failed. Please try again.</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            function renderPagination(pagination) {
+                const container = document.getElementById('pagination');
+                
+                if (pagination.total_pages <= 1) {
+                    container.innerHTML = '';
+                    return;
+                }
+                
+                let html = '';
+                
+                html += `<button class="pagination-btn" ${!pagination.has_prev ? 'disabled' : ''} onclick="changePage(${pagination.current_page - 1})">
+                    <i class="fas fa-chevron-left"></i>
+                </button>`;
+                
+                for (let i = 1; i <= pagination.total_pages; i++) {
+                    if (i === 1 || i === pagination.total_pages || (i >= pagination.current_page - 1 && i <= pagination.current_page + 1)) {
+                        html += `<button class="pagination-btn ${i === pagination.current_page ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+                    } else if (i === pagination.current_page - 2 || i === pagination.current_page + 2) {
+                        html += `<span style="color: var(--text-muted);">...</span>`;
+                    }
+                }
+                
+                html += `<button class="pagination-btn" ${!pagination.has_next ? 'disabled' : ''} onclick="changePage(${pagination.current_page + 1})">
+                    <i class="fas fa-chevron-right"></i>
+                </button>`;
+                
+                container.innerHTML = html;
+            }
+            
+            window.changePage = function(page) {
+                currentPage = page;
+                performSearch(currentQuery, page);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+        });
+    </script>
+</body>
+</html>

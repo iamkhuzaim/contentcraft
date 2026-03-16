@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - ContentCraft Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .admin-page {
+            padding: 2rem 0 4rem;
+        }
+        
+        .admin-header {
+            margin-bottom: 2rem;
+        }
+        
+        .admin-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .admin-header p {
+            color: var(--text-secondary);
+        }
+        
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+        
+        .admin-sidebar {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            height: fit-content;
+        }
+        
+        .admin-nav {
+            list-style: none;
+        }
+        
+        .admin-nav li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .admin-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+        
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .admin-nav a i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .settings-section {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .settings-section h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .settings-section h2 i {
+            color: var(--primary-color);
+            margin-right: 0.5rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            transition: all var(--transition-fast);
+        }
+        
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.375rem;
+        }
+        
+        .btn-save {
+            min-width: 150px;
+        }
+        
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-sidebar {
+                display: none;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-pen-fancy"></i>
+                <span>ContentCraft</span>
+            </a>
+            
+            <ul class="navbar-nav" id="navbar-nav">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/blogs" class="nav-link">Blogs</a></li>
+                <li><a href="/categories" class="nav-link">Categories</a></li>
+                <li><a href="/search" class="nav-link">Search</a></li>
+                <li><a href="/about" class="nav-link">About</a></li>
+                <li><a href="/contact" class="nav-link">Contact</a></li>
+                <li><a href="/faq" class="nav-link">FAQ</a></li>
+            </ul>
+            
+            <div class="navbar-actions">
+                <div id="auth-links" style="display: flex; gap: 1rem;">
+                    <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+                    <a href="/signup" class="btn btn-primary btn-sm">Sign Up</a>
+                </div>
+                
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <div class="user-menu-trigger">
+                        <img src="" alt="User" class="user-avatar" id="user-avatar">
+                        <span id="user-name">User</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
+                    </div>
+                    <div class="user-dropdown">
+                        <a href="/dashboard" class="dropdown-item">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="/profile" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="/admin" class="dropdown-item admin-only" style="display: none;">
+                            <i class="fas fa-cog"></i> Admin Panel
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="admin-page">
+        <div class="container">
+            <div class="admin-header">
+                <h1><i class="fas fa-sliders-h"></i> Site Settings</h1>
+                <p>Manage your platform configuration</p>
+            </div>
+            
+            <div class="admin-grid">
+                <aside class="admin-sidebar">
+                    <ul class="admin-nav">
+                        <li><a href="/admin"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                        <li><a href="/admin/blogs"><i class="fas fa-file-alt"></i> Blog Manager</a></li>
+                        <li><a href="/admin/users"><i class="fas fa-users"></i> User Manager</a></li>
+                        <li><a href="/admin/messages"><i class="fas fa-envelope"></i> Messages</a></li>
+                        <li><a href="/admin/settings" class="active"><i class="fas fa-sliders-h"></i> Settings</a></li>
+                        <li><a href="/profile"><i class="fas fa-user"></i> My Profile</a></li>
+                    </ul>
+                </aside>
+                
+                <div class="admin-content">
+                    <!-- Contact Settings -->
+                    <div class="settings-section">
+                        <h2><i class="fas fa-envelope"></i> Contact Information</h2>
+                        <form id="contact-settings-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="contact_email">Contact Email</label>
+                                    <input type="email" id="contact_email" name="contact_email" class="form-input" placeholder="support@contentcraft.com">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="contact_phone">Contact Phone</label>
+                                    <input type="text" id="contact_phone" name="contact_phone" class="form-input" placeholder="+1 (555) 987-6543">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="contact_address">Address</label>
+                                <textarea id="contact_address" name="contact_address" class="form-textarea" rows="3" placeholder="123 Innovation Avenue, Tech City, TC 54321"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="contact_maps_url">Google Maps URL</label>
+                                <input type="url" id="contact_maps_url" name="contact_maps_url" class="form-input" placeholder="https://maps.google.com/?q=...">
+                                <p class="form-hint">The URL for your location in Google Maps</p>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-save">
+                                <i class="fas fa-save"></i> Save Contact Settings
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- About Page Settings -->
+                    <div class="settings-section">
+                        <h2><i class="fas fa-info-circle"></i> About Page</h2>
+                        <form id="about-settings-form">
+                            <div class="form-group">
+                                <label class="form-label" for="about_mission">Mission Statement</label>
+                                <textarea id="about_mission" name="about_mission" class="form-textarea" rows="3" placeholder="Our mission..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="about_vision">Vision</label>
+                                <textarea id="about_vision" name="about_vision" class="form-textarea" rows="3" placeholder="Our vision..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="about_story">Our Story</label>
+                                <textarea id="about_story" name="about_story" class="form-textarea" rows="5" placeholder="The story of ContentCraft..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-save">
+                                <i class="fas fa-save"></i> Save About Settings
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Social Media Settings -->
+                    <div class="settings-section">
+                        <h2><i class="fas fa-share-alt"></i> Social Media Links</h2>
+                        <form id="social-settings-form">
+                            <div class="settings-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="social_facebook">Facebook</label>
+                                    <input type="url" id="social_facebook" name="social_facebook" class="form-input" placeholder="https://facebook.com/...">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="social_twitter">Twitter</label>
+                                    <input type="url" id="social_twitter" name="social_twitter" class="form-input" placeholder="https://twitter.com/...">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="social_instagram">Instagram</label>
+                                    <input type="url" id="social_instagram" name="social_instagram" class="form-input" placeholder="https://instagram.com/...">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="social_linkedin">LinkedIn</label>
+                                    <input type="url" id="social_linkedin" name="social_linkedin" class="form-input" placeholder="https://linkedin.com/company/...">
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-save">
+                                <i class="fas fa-save"></i> Save Social Links
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Site Metadata -->
+                    <div class="settings-section">
+                        <h2><i class="fas fa-globe"></i> Site Metadata</h2>
+                        <form id="metadata-settings-form">
+                            <div class="form-group">
+                                <label class="form-label" for="site_name">Site Name</label>
+                                <input type="text" id="site_name" name="site_name" class="form-input" placeholder="ContentCraft">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="site_description">Site Description</label>
+                                <textarea id="site_description" name="site_description" class="form-textarea" rows="3" placeholder="A modern platform for creators..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="site_keywords">Keywords (comma separated)</label>
+                                <input type="text" id="site_keywords" name="site_keywords" class="form-input" placeholder="blogging, content, writing, publishing">
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-save">
+                                <i class="fas fa-save"></i> Save Metadata
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="footer-logo">
+                        <i class="fas fa-pen-fancy"></i>
+                        <span>ContentCraft</span>
+                    </a>
+                    <p class="footer-description">
+                        A modern platform where creators craft stories that matter. Join our community of passionate writers and readers.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/blogs">All Stories</a></li>
+                        <li><a href="/categories">Categories</a></li>
+                        <li><a href="/search">Search</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                        <li><a href="/contact">Help Center</a></li>
+                        <li><a href="/contact">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    &copy; 2024 ContentCraft. All rights reserved. Made with <i class="fas fa-heart" style="color: #f43f5e;"></i> for creators.
+                </p>
+                <div class="footer-legal">
+                    <a href="/privacy">Privacy</a>
+                    <a href="/terms">Terms</a>
+                    <a href="/cookies">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!window.ContentCraft.Auth.requireAdmin()) return;
+            
+            // Load all settings
+            async function loadSettings() {
+                try {
+                    const data = await window.ContentCraft.API.get('/api/settings');
+                    if (data && data.success) {
+                        const settings = data.data.settings;
+                        
+                        // Populate contact form
+                        document.getElementById('contact_email').value = settings.contact_email || '';
+                        document.getElementById('contact_phone').value = settings.contact_phone || '';
+                        document.getElementById('contact_address').value = settings.contact_address || '';
+                        document.getElementById('contact_maps_url').value = settings.contact_maps_url || '';
+                        
+                        // Populate about form
+                        document.getElementById('about_mission').value = settings.about_mission || '';
+                        document.getElementById('about_vision').value = settings.about_vision || '';
+                        document.getElementById('about_story').value = settings.about_story || '';
+                        
+                        // Populate social form
+                        document.getElementById('social_facebook').value = settings.social_facebook || '';
+                        document.getElementById('social_twitter').value = settings.social_twitter || '';
+                        document.getElementById('social_instagram').value = settings.social_instagram || '';
+                        document.getElementById('social_linkedin').value = settings.social_linkedin || '';
+                        
+                        // Populate metadata form
+                        document.getElementById('site_name').value = settings.site_name || 'ContentCraft';
+                        document.getElementById('site_description').value = settings.site_description || '';
+                        document.getElementById('site_keywords').value = settings.site_keywords || '';
+                    }
+                } catch (error) {
+                    window.ContentCraft.Toast.error('Failed to load settings');
+                }
+            }
+            
+            // Save settings helper
+            async function saveSettings(formId, settings) {
+                try {
+                    const response = await window.ContentCraft.API.put('/api/settings', settings);
+                    if (response && response.success) {
+                        window.ContentCraft.Toast.success('Settings saved!');
+                    } else {
+                        window.ContentCraft.Toast.error(response?.message || 'Failed to save settings');
+                    }
+                } catch (error) {
+                    window.ContentCraft.Toast.error('Failed to save settings');
+                }
+            }
+            
+            // Contact form submit
+            document.getElementById('contact-settings-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const settings = {
+                    contact_email: document.getElementById('contact_email').value,
+                    contact_phone: document.getElementById('contact_phone').value,
+                    contact_address: document.getElementById('contact_address').value,
+                    contact_maps_url: document.getElementById('contact_maps_url').value
+                };
+                saveSettings('contact-settings-form', settings);
+            });
+            
+            // About form submit
+            document.getElementById('about-settings-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const settings = {
+                    about_mission: document.getElementById('about_mission').value,
+                    about_vision: document.getElementById('about_vision').value,
+                    about_story: document.getElementById('about_story').value
+                };
+                saveSettings('about-settings-form', settings);
+            });
+            
+            // Social form submit
+            document.getElementById('social-settings-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const settings = {
+                    social_facebook: document.getElementById('social_facebook').value,
+                    social_twitter: document.getElementById('social_twitter').value,
+                    social_instagram: document.getElementById('social_instagram').value,
+                    social_linkedin: document.getElementById('social_linkedin').value
+                };
+                saveSettings('social-settings-form', settings);
+            });
+            
+            // Metadata form submit
+            document.getElementById('metadata-settings-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const settings = {
+                    site_name: document.getElementById('site_name').value,
+                    site_description: document.getElementById('site_description').value,
+                    site_keywords: document.getElementById('site_keywords').value
+                };
+                saveSettings('metadata-settings-form', settings);
+            });
+            
+            loadSettings();
+        });
+    </script>
+</body>
+</html>

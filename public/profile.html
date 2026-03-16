@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - ContentCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .profile-page {
+            padding: 2rem 0 4rem;
+        }
+        
+        .profile-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            margin-bottom: 2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+        }
+        
+        .profile-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, 50%);
+        }
+        
+        .profile-header-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .profile-avatar-wrapper {
+            position: relative;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: var(--radius-full);
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .profile-avatar-edit {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 36px;
+            height: 36px;
+            background: white;
+            border: none;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            color: var(--primary-color);
+            transition: all var(--transition-fast);
+        }
+        
+        .profile-avatar-edit:hover {
+            transform: scale(1.1);
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .profile-info h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-info p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        
+        .profile-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+        
+        .profile-tab {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+        }
+        
+        .profile-tab:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .profile-tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .profile-content {
+            display: none;
+        }
+        
+        .profile-content.active {
+            display: block;
+        }
+        
+        .profile-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+        
+        .profile-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .profile-card-title i {
+            color: var(--primary-color);
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .form-section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .stat-card-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .activity-content h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-content p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .activity-time {
+            margin-left: auto;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-fast);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            transform: scale(0.9);
+            transition: transform var(--transition-fast);
+        }
+        
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .avatar-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: var(--radius-full);
+            object-fit: cover;
+            margin: 0 auto 1.5rem;
+            display: block;
+            border: 3px solid var(--border-color);
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .file-input-label:hover {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .modal-actions .btn {
+            flex: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .profile-header {
+                padding: 2rem;
+            }
+            
+            .profile-header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+            
+            .profile-tab {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-pen-fancy"></i>
+                <span>ContentCraft</span>
+            </a>
+            
+            <ul class="navbar-nav" id="navbar-nav">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/blogs" class="nav-link">Blogs</a></li>
+                <li><a href="/categories" class="nav-link">Categories</a></li>
+                <li><a href="/search" class="nav-link">Search</a></li>
+                <li><a href="/about" class="nav-link">About</a></li>
+                <li><a href="/contact" class="nav-link">Contact</a></li>
+                <li><a href="/faq" class="nav-link">FAQ</a></li>
+            </ul>
+            
+            <div class="navbar-actions">
+                <div id="auth-links" style="display: flex; gap: 1rem;">
+                    <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+                    <a href="/signup" class="btn btn-primary btn-sm">Sign Up</a>
+                </div>
+                
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <div class="user-menu-trigger">
+                        <img src="" alt="User" class="user-avatar" id="user-avatar">
+                        <span id="user-name">User</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
+                    </div>
+                    <div class="user-dropdown">
+                        <a href="/dashboard" class="dropdown-item">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="/profile" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="/admin" class="dropdown-item admin-only" style="display: none;">
+                            <i class="fas fa-cog"></i> Admin Panel
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="profile-page">
+        <div class="container">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-header-content">
+                    <div class="profile-avatar-wrapper">
+                        <img src="" alt="Profile" class="profile-avatar" id="profile-avatar">
+                        <button class="profile-avatar-edit" id="avatar-edit-btn" title="Change Avatar">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <div class="profile-info">
+                        <h1 id="profile-name">Loading...</h1>
+                        <p id="profile-email">loading@example.com</p>
+                        <p id="profile-role" style="margin-top: 0.5rem; opacity: 0.8;">
+                            <i class="fas fa-calendar-alt"></i> Member since <span id="member-since">...</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Tabs -->
+            <div class="profile-tabs">
+                <button class="profile-tab active" data-tab="overview">Overview</button>
+                <button class="profile-tab" data-tab="edit">Edit Profile</button>
+                <button class="profile-tab" data-tab="password">Change Password</button>
+            </div>
+
+            <!-- Overview Tab -->
+            <div class="profile-content active" id="tab-overview">
+                <div class="stats-grid" id="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-value" id="stat-blogs">0</div>
+                        <div class="stat-card-label">Blogs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value" id="stat-comments">0</div>
+                        <div class="stat-card-label">Comments</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value" id="stat-views">0</div>
+                        <div class="stat-card-label">Total Views</div>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <h3 class="profile-card-title"><i class="fas fa-user-circle"></i> About Me</h3>
+                    <p id="profile-bio" style="color: var(--text-secondary); line-height: 1.6;">No bio added yet.</p>
+                    
+                    <div style="margin-top: 1.5rem; display: flex; gap: 2rem; flex-wrap: wrap;">
+                        <div id="profile-location" style="display: none;">
+                            <i class="fas fa-map-marker-alt" style="color: var(--primary-color);"></i>
+                            <span style="margin-left: 0.5rem; color: var(--text-secondary);"></span>
+                        </div>
+                        <div id="profile-phone" style="display: none;">
+                            <i class="fas fa-phone" style="color: var(--primary-color);"></i>
+                            <span style="margin-left: 0.5rem; color: var(--text-secondary);"></span>
+                        </div>
+                        <div id="profile-website" style="display: none;">
+                            <i class="fas fa-globe" style="color: var(--primary-color);"></i>
+                            <a href="#" target="_blank" style="margin-left: 0.5rem; color: var(--primary-color);"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Profile Tab -->
+            <div class="profile-content" id="tab-edit">
+                <div class="profile-card">
+                    <h3 class="profile-card-title"><i class="fas fa-edit"></i> Edit Profile</h3>
+                    <form id="edit-profile-form">
+                        <div class="form-section">
+                            <h4 class="form-section-title">Basic Information</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="edit-name">Full Name</label>
+                                    <input type="text" id="edit-name" name="name" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="edit-email">Email</label>
+                                    <input type="email" id="edit-email" name="email" class="form-input" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4 class="form-section-title">About</h4>
+                            <div class="form-group">
+                                <label class="form-label" for="edit-bio">Bio</label>
+                                <textarea id="edit-bio" name="bio" class="form-textarea" rows="4" placeholder="Tell us about yourself..."></textarea>
+                                <p class="form-hint">Maximum 500 characters</p>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4 class="form-section-title">Contact Information</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="edit-phone">Phone</label>
+                                    <input type="tel" id="edit-phone" name="phone" class="form-input" placeholder="Your phone number">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="edit-location">Location</label>
+                                    <input type="text" id="edit-location" name="location" class="form-input" placeholder="City, Country">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="edit-website">Website</label>
+                                <input type="url" id="edit-website" name="website" class="form-input" placeholder="https://yourwebsite.com">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="save-profile-btn">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Change Password Tab -->
+            <div class="profile-content" id="tab-password">
+                <div class="profile-card" style="max-width: 500px;">
+                    <h3 class="profile-card-title"><i class="fas fa-lock"></i> Change Password</h3>
+                    <form id="change-password-form">
+                        <div class="form-group">
+                            <label class="form-label" for="current-password">Current Password</label>
+                            <input type="password" id="current-password" name="currentPassword" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="new-password">New Password</label>
+                            <input type="password" id="new-password" name="newPassword" class="form-input" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="confirm-new-password">Confirm New Password</label>
+                            <input type="password" id="confirm-new-password" name="confirmNewPassword" class="form-input" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="change-password-btn">
+                            <i class="fas fa-key"></i> Change Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="footer-logo">
+                        <i class="fas fa-pen-fancy"></i>
+                        <span>ContentCraft</span>
+                    </a>
+                    <p class="footer-description">
+                        A modern platform where creators craft stories that matter. Join our community of passionate writers and readers.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/blogs">All Stories</a></li>
+                        <li><a href="/categories">Categories</a></li>
+                        <li><a href="/search">Search</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                        <li><a href="/contact">Help Center</a></li>
+                        <li><a href="/contact">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    &copy; 2024 ContentCraft. All rights reserved. Made with <i class="fas fa-heart" style="color: #f43f5e;"></i> for creators.
+                </p>
+                <div class="footer-legal">
+                    <a href="/privacy">Privacy</a>
+                    <a href="/terms">Terms</a>
+                    <a href="/cookies">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Avatar Upload Modal -->
+    <div class="modal-overlay" id="avatar-modal">
+        <div class="modal">
+            <h3 class="modal-title">Update Profile Picture</h3>
+            <img src="" alt="Preview" class="avatar-preview" id="avatar-preview">
+            <div class="file-input-wrapper">
+                <input type="file" id="avatar-input" accept="image/*">
+                <label for="avatar-input" class="file-input-label">
+                    <i class="fas fa-upload"></i> Choose Image
+                </label>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancel-avatar">Cancel</button>
+                <button class="btn btn-primary" id="save-avatar">
+                    <i class="fas fa-save"></i> Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Require authentication
+            if (!window.ContentCraft.Auth.requireAuth()) return;
+            
+            let currentUser = null;
+            let selectedAvatarFile = null;
+            
+            // Tab switching
+            document.querySelectorAll('.profile-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.profile-content').forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+                });
+            });
+            
+            // Load user profile
+            async function loadProfile() {
+                try {
+                    const data = await window.ContentCraft.API.get('/api/auth/me');
+                    if (data && data.success) {
+                        currentUser = data.data.user;
+                        displayProfile(currentUser);
+                        loadStats();
+                    }
+                } catch (error) {
+                    window.ContentCraft.Toast.error('Failed to load profile');
+                }
+            }
+            
+            // Display profile data
+            function displayProfile(user) {
+                // Header
+                document.getElementById('profile-name').textContent = user.name;
+                document.getElementById('profile-email').textContent = user.email;
+                document.getElementById('member-since').textContent = window.ContentCraft.UI.formatDate(user.created_at);
+                
+                // Avatar
+                const avatarImg = document.getElementById('profile-avatar');
+                if (user.avatar_url) {
+                    avatarImg.src = user.avatar_url;
+                    avatarImg.onerror = () => { avatarImg.src = window.ContentCraft.Avatar.generate(user.name); };
+                } else {
+                    avatarImg.src = window.ContentCraft.Avatar.generate(user.name);
+                }
+                
+                // Bio
+                const bioEl = document.getElementById('profile-bio');
+                if (user.bio) {
+                    bioEl.textContent = user.bio;
+                    bioEl.style.color = 'var(--text-primary)';
+                } else {
+                    bioEl.textContent = 'No bio added yet.';
+                    bioEl.style.color = 'var(--text-secondary)';
+                }
+                
+                // Contact info
+                if (user.location) {
+                    const locEl = document.getElementById('profile-location');
+                    locEl.style.display = 'block';
+                    locEl.querySelector('span').textContent = user.location;
+                }
+                
+                if (user.phone) {
+                    const phoneEl = document.getElementById('profile-phone');
+                    phoneEl.style.display = 'block';
+                    phoneEl.querySelector('span').textContent = user.phone;
+                }
+                
+                if (user.website) {
+                    const webEl = document.getElementById('profile-website');
+                    webEl.style.display = 'block';
+                    const link = webEl.querySelector('a');
+                    link.href = user.website;
+                    link.textContent = user.website.replace(/^https?:\/\//, '');
+                }
+                
+                // Edit form
+                document.getElementById('edit-name').value = user.name;
+                document.getElementById('edit-email').value = user.email;
+                document.getElementById('edit-bio').value = user.bio || '';
+                document.getElementById('edit-phone').value = user.phone || '';
+                document.getElementById('edit-location').value = user.location || '';
+                document.getElementById('edit-website').value = user.website || '';
+            }
+            
+            // Load user stats
+            async function loadStats() {
+                try {
+                    const data = await window.ContentCraft.API.get('/api/users/me/stats');
+                    if (data && data.success) {
+                        document.getElementById('stat-blogs').textContent = data.data.stats.total_blogs;
+                        document.getElementById('stat-comments').textContent = data.data.stats.total_comments;
+                        document.getElementById('stat-views').textContent = data.data.stats.total_views;
+                    }
+                } catch (error) {
+                    console.error('Failed to load stats:', error);
+                }
+            }
+            
+            // Avatar upload modal
+            const avatarModal = document.getElementById('avatar-modal');
+            const avatarInput = document.getElementById('avatar-input');
+            const avatarPreview = document.getElementById('avatar-preview');
+            
+            document.getElementById('avatar-edit-btn').addEventListener('click', () => {
+                avatarPreview.src = document.getElementById('profile-avatar').src;
+                avatarModal.classList.add('active');
+            });
+            
+            document.getElementById('cancel-avatar').addEventListener('click', () => {
+                avatarModal.classList.remove('active');
+                selectedAvatarFile = null;
+                avatarInput.value = '';
+            });
+            
+            avatarInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    selectedAvatarFile = file;
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        avatarPreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            document.getElementById('save-avatar').addEventListener('click', async () => {
+                if (!selectedAvatarFile) {
+                    window.ContentCraft.Toast.warning('Please select an image');
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('avatar', selectedAvatarFile);
+                
+                try {
+                    const data = await window.ContentCraft.API.upload('/api/auth/avatar', formData);
+                    if (data.success) {
+                        window.ContentCraft.Toast.success('Avatar updated!');
+                        avatarModal.classList.remove('active');
+                        loadProfile();
+                        window.ContentCraft.Auth.updateUI();
+                    } else {
+                        window.ContentCraft.Toast.error(data.message || 'Failed to upload avatar');
+                    }
+                } catch (error) {
+                    window.ContentCraft.Toast.error('Failed to upload avatar');
+                }
+            });
+            
+            // Edit profile form
+            document.getElementById('edit-profile-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const btn = document.getElementById('save-profile-btn');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                
+                const data = {
+                    name: document.getElementById('edit-name').value.trim(),
+                    bio: document.getElementById('edit-bio').value.trim(),
+                    phone: document.getElementById('edit-phone').value.trim(),
+                    location: document.getElementById('edit-location').value.trim(),
+                    website: document.getElementById('edit-website').value.trim()
+                };
+                
+                try {
+                    const response = await window.ContentCraft.API.put('/api/auth/profile', data);
+                    if (response && response.success) {
+                        window.ContentCraft.Toast.success('Profile updated!');
+                        loadProfile();
+                        window.ContentCraft.Auth.updateUI();
+                    } else {
+                        window.ContentCraft.Toast.error(response?.message || 'Failed to update profile');
+                    }
+                } catch (error) {
+                    window.ContentCraft.Toast.error('Failed to update profile');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+                }
+            });
+            
+            // Change password form
+            document.getElementById('change-password-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const currentPassword = document.getElementById('current-password').value;
+                const newPassword = document.getElementById('new-password').value;
+                const confirmNewPassword = document.getElementById('confirm-new-password').value;
+                
+                if (newPassword !== confirmNewPassword) {
+                    window.ContentCraft.Toast.error('New passwords do not match');
+                    return;
+                }
+                
+                if (newPassword.length < 6) {
+                    window.ContentCraft.Toast.error('Password must be at least 6 characters');
+                    return;
+                }
+                
+                const btn = document.getElementById('change-password-btn');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Changing...';
+                
+                try {
+                    const response = await window.ContentCraft.API.put('/api/auth/password', {
+                        currentPassword,
+                        newPassword
+                    });
+                    
+                    if (response && response.success) {
+                        window.ContentCraft.Toast.success('Password changed!');
+                        document.getElementById('change-password-form').reset();
+                    } else {
+                        window.ContentCraft.Toast.error(response?.message || 'Failed to change password');
+                    }
+                } catch (error) {
+                    window.ContentCraft.Toast.error('Failed to change password');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-key"></i> Change Password';
+                }
+            });
+            
+            // Close modal on overlay click
+            avatarModal.addEventListener('click', (e) => {
+                if (e.target === avatarModal) {
+                    avatarModal.classList.remove('active');
+                }
+            });
+            
+            // Load initial data
+            loadProfile();
+        });
+    </script>
+</body>
+</html>

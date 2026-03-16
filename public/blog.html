@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - ContentCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .blog-detail-page {
+            padding: 2rem 0 4rem;
+        }
+        
+        .blog-detail-header {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            text-align: center;
+        }
+        
+        .blog-detail-category {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .blog-detail-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .blog-detail-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        .blog-detail-author {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .blog-detail-author img {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+        }
+        
+        .blog-detail-image {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto 3rem;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .blog-detail-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        
+        .blog-detail-content {
+            max-width: 800px;
+            margin: 0 auto;
+            font-family: 'Merriweather', Georgia, serif;
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+        
+        /* Content formatting */
+        .blog-detail-content h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 2.5rem 0 1rem;
+            color: var(--text-primary);
+        }
+        
+        .blog-detail-content h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin: 2rem 0 0.875rem;
+            color: var(--text-primary);
+        }
+        
+        .blog-detail-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .blog-detail-content ul,
+        .blog-detail-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+        
+        .blog-detail-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .blog-detail-content pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .blog-detail-content code {
+            background: var(--bg-tertiary);
+            padding: 0.125rem 0.375rem;
+            border-radius: var(--radius-sm);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+        }
+        
+        .blog-detail-content pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        .blog-detail-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        
+        .blog-detail-content a {
+            color: var(--primary-color);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        
+        .blog-detail-content a:hover {
+            color: var(--primary-dark);
+        }
+        
+        .blog-detail-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-lg);
+            margin: 1.5rem 0;
+        }
+        
+        /* Blog Actions */
+        .blog-actions {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .blog-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .rating-stars {
+            display: flex;
+            gap: 0.25rem;
+        }
+        
+        .rating-star {
+            font-size: 1.25rem;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .rating-star.active,
+        .rating-star:hover {
+            color: #fbbf24;
+            transform: scale(1.1);
+        }
+        
+        .blog-share {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .share-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .share-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        /* Comments Section */
+        .comments-section {
+            max-width: 800px;
+            margin: 3rem auto 0;
+        }
+        
+        .comments-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .comments-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .comment-count {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+        }
+        
+        .comment-form {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 2rem;
+        }
+        
+        .comment-form textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 1rem;
+        }
+        
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .comment {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-fast);
+        }
+        
+        .comment:hover {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .comment-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-full);
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid var(--border-color);
+        }
+        
+        .comment-content {
+            flex: 1;
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .comment-author {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .comment-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        .comment-text {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .comment-delete {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.25rem;
+            margin-left: 0.5rem;
+            transition: color var(--transition-fast);
+        }
+        
+        .comment-delete:hover {
+            color: var(--error-color);
+        }
+        
+        .login-to-comment {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+        }
+        
+        .login-to-comment p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .blog-detail-title {
+                font-size: 2rem;
+            }
+            
+            .blog-detail-content {
+                font-size: 1rem;
+            }
+            
+            .blog-actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .comment {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-pen-fancy"></i>
+                <span>ContentCraft</span>
+            </a>
+            
+            <ul class="navbar-nav" id="navbar-nav">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/blogs" class="nav-link">Blogs</a></li>
+                <li><a href="/categories" class="nav-link">Categories</a></li>
+                <li><a href="/search" class="nav-link">Search</a></li>
+                <li><a href="/about" class="nav-link">About</a></li>
+                <li><a href="/contact" class="nav-link">Contact</a></li>
+                <li><a href="/faq" class="nav-link">FAQ</a></li>
+            </ul>
+            
+            <div class="navbar-actions">
+                <div id="auth-links" style="display: flex; gap: 1rem;">
+                    <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+                    <a href="/signup" class="btn btn-primary btn-sm">Sign Up</a>
+                </div>
+                
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <div class="user-menu-trigger">
+                        <img src="" alt="User" class="user-avatar" id="user-avatar">
+                        <span id="user-name">User</span>
+                        <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
+                    </div>
+                    <div class="user-dropdown">
+                        <a href="/dashboard" class="dropdown-item">
+                            <i class="fas fa-th-large"></i> Dashboard
+                        </a>
+                        <a href="/profile" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="/admin" class="dropdown-item admin-only" style="display: none;">
+                            <i class="fas fa-cog"></i> Admin Panel
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="blog-detail-page">
+        <div class="container">
+            <!-- Blog Header -->
+            <div class="blog-detail-header">
+                <span class="blog-detail-category" id="blog-category">Category</span>
+                <h1 class="blog-detail-title" id="blog-title">Loading...</h1>
+                <div class="blog-detail-meta">
+                    <div class="blog-detail-author">
+                        <img src="" alt="" id="author-avatar">
+                        <span id="author-name">Author</span>
+                    </div>
+                    <span><i class="fas fa-calendar-alt"></i> <span id="blog-date">...</span></span>
+                    <span><i class="fas fa-eye"></i> <span id="blog-views">0</span> views</span>
+                </div>
+            </div>
+            
+            <!-- Blog Image -->
+            <div class="blog-detail-image" id="blog-image-container" style="display: none;">
+                <img src="" alt="" id="blog-image">
+            </div>
+            
+            <!-- Blog Content -->
+            <div class="blog-detail-content" id="blog-content">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            
+            <!-- Blog Actions -->
+            <div class="blog-actions">
+                <div class="blog-rating">
+                    <span>Rate this article:</span>
+                    <div class="rating-stars" id="rating-stars">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                    <span id="rating-text">(<span id="avg-rating">0.0</span> / 5)</span>
+                </div>
+                <div class="blog-share">
+                    <button class="share-btn" onclick="shareBlog('twitter')" title="Share on Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </button>
+                    <button class="share-btn" onclick="shareBlog('facebook')" title="Share on Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </button>
+                    <button class="share-btn" onclick="shareBlog('linkedin')" title="Share on LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </button>
+                    <button class="share-btn" onclick="copyLink()" title="Copy Link">
+                        <i class="fas fa-link"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Comments Section -->
+            <div class="comments-section">
+                <div class="comments-header">
+                    <h3>Comments</h3>
+                    <span class="comment-count" id="comment-count">0</span>
+                </div>
+                
+                <div id="comment-form-container">
+                    <!-- Will be populated based on auth status -->
+                </div>
+                
+                <div class="comments-list" id="comments-list">
+                    <!-- Comments will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="footer-logo">
+                        <i class="fas fa-pen-fancy"></i>
+                        <span>ContentCraft</span>
+                    </a>
+                    <p class="footer-description">
+                        A modern platform where creators craft stories that matter. Join our community of passionate writers and readers.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Explore</h4>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/blogs">All Stories</a></li>
+                        <li><a href="/categories">Categories</a></li>
+                        <li><a href="/search">Search</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                        <li><a href="/contact">Help Center</a></li>
+                        <li><a href="/contact">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    &copy; 2024 ContentCraft. All rights reserved. Made with <i class="fas fa-heart" style="color: #f43f5e;"></i> for creators.
+                </p>
+                <div class="footer-legal">
+                    <a href="/privacy">Privacy</a>
+                    <a href="/terms">Terms</a>
+                    <a href="/cookies">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const blogId = window.location.pathname.split('/').pop();
+            let currentBlog = null;
+            let userRating = 0;
+            
+            // Load blog
+            async function loadBlog() {
+                try {
+                    const response = await fetch(`/api/blogs/${blogId}`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        currentBlog = data.data.blog;
+                        displayBlog(currentBlog);
+                    } else {
+                        document.getElementById('blog-content').innerHTML = `
+                            <div class="empty-state">
+                                <h3>Blog not found</h3>
+                                <p>The blog you're looking for doesn't exist.</p>
+                                <a href="/blogs" class="btn btn-primary mt-4">Browse All Blogs</a>
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    console.error('Failed to load blog:', error);
+                    document.getElementById('blog-content').innerHTML = `
+                        <div class="error-state">
+                            <p>Failed to load blog. Please try again.</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Display blog
+            function displayBlog(blog) {
+                document.title = `${blog.title} - ContentCraft`;
+                
+                document.getElementById('blog-category').textContent = blog.category_name;
+                document.getElementById('blog-title').textContent = blog.title;
+                document.getElementById('author-name').textContent = blog.author_name;
+                document.getElementById('author-avatar').src = blog.author_avatar_url || window.ContentCraft.Avatar.generate(blog.author_name);
+                document.getElementById('blog-date').textContent = window.ContentCraft.UI.formatDate(blog.created_at);
+                document.getElementById('blog-views').textContent = blog.views;
+                
+                if (blog.image_url) {
+                    document.getElementById('blog-image').src = blog.image_url;
+                    document.getElementById('blog-image-container').style.display = 'block';
+                }
+                
+                // Format content
+                document.getElementById('blog-content').innerHTML = blog.content;
+                
+                // Rating
+                if (blog.avg_rating) {
+                    document.getElementById('avg-rating').textContent = blog.avg_rating;
+                }
+                if (blog.user_rating) {
+                    userRating = blog.user_rating;
+                    updateRatingDisplay();
+                }
+                
+                // Comments
+                displayComments(blog.comments);
+                
+                // Comment form
+                updateCommentForm();
+            }
+            
+            // Display comments
+            function displayComments(comments) {
+                const container = document.getElementById('comments-list');
+                document.getElementById('comment-count').textContent = comments.length;
+                
+                if (comments.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No comments yet. Be the first to comment!</p>';
+                    return;
+                }
+                
+                container.innerHTML = comments.map(comment => `
+                    <div class="comment" data-comment-id="${comment.id}">
+                        <img src="${comment.user_avatar_url || window.ContentCraft.Avatar.generate(comment.user_name)}" 
+                             alt="${comment.user_name}" 
+                             class="comment-avatar"
+                             onerror="this.src='${window.ContentCraft.Avatar.generate(comment.user_name)}'">
+                        <div class="comment-content">
+                            <div class="comment-header">
+                                <span class="comment-author">${comment.user_name}</span>
+                                <div>
+                                    <span class="comment-time">${window.ContentCraft.UI.formatRelativeDate(comment.created_at)}</span>
+                                    ${(window.ContentCraft.Auth.isAdmin() || (window.ContentCraft.Auth.getUser() && window.ContentCraft.Auth.getUser().id === comment.user_id)) ? `
+                                        <button class="comment-delete" onclick="deleteComment(${comment.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            <p class="comment-text">${escapeHtml(comment.comment)}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Update comment form based on auth
+            function updateCommentForm() {
+                const container = document.getElementById('comment-form-container');
+                
+                if (window.ContentCraft.Auth.isLoggedIn()) {
+                    container.innerHTML = `
+                        <form class="comment-form" id="comment-form">
+                            <textarea id="comment-text" placeholder="Share your thoughts..." required></textarea>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Post Comment
+                            </button>
+                        </form>
+                    `;
+                    
+                    document.getElementById('comment-form').addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        
+                        const text = document.getElementById('comment-text').value.trim();
+                        if (!text) return;
+                        
+                        try {
+                            const response = await fetch(`/api/blogs/${blogId}/comments`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${window.ContentCraft.Auth.getToken()}`
+                                },
+                                body: JSON.stringify({ comment: text })
+                            });
+                            
+                            const data = await response.json();
+                            
+                            if (data.success) {
+                                window.ContentCraft.Toast.success('Comment posted!');
+                                document.getElementById('comment-text').value = '';
+                                loadBlog();
+                            } else {
+                                window.ContentCraft.Toast.error(data.message || 'Failed to post comment');
+                            }
+                        } catch (error) {
+                            window.ContentCraft.Toast.error('Failed to post comment');
+                        }
+                    });
+                } else {
+                    container.innerHTML = `
+                        <div class="login-to-comment">
+                            <p>Please login to join the conversation</p>
+                            <a href="/login" class="btn btn-primary">Login</a>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Rating stars
+            document.querySelectorAll('.rating-star').forEach(star => {
+                star.addEventListener('click', async () => {
+                    if (!window.ContentCraft.Auth.isLoggedIn()) {
+                        window.ContentCraft.Toast.warning('Please login to rate');
+                        setTimeout(() => window.location.href = '/login', 1500);
+                        return;
+                    }
+                    
+                    const rating = parseInt(star.dataset.rating);
+                    
+                    try {
+                        const response = await fetch(`/api/blogs/${blogId}/ratings`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${window.ContentCraft.Auth.getToken()}`
+                            },
+                            body: JSON.stringify({ rating })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            userRating = rating;
+                            updateRatingDisplay();
+                            document.getElementById('avg-rating').textContent = data.data.avg_rating;
+                            window.ContentCraft.Toast.success('Rating submitted!');
+                        } else {
+                            window.ContentCraft.Toast.error(data.message || 'Failed to submit rating');
+                        }
+                    } catch (error) {
+                        window.ContentCraft.Toast.error('Failed to submit rating');
+                    }
+                });
+            });
+            
+            function updateRatingDisplay() {
+                document.querySelectorAll('.rating-star').forEach((star, index) => {
+                    if (index < userRating) {
+                        star.classList.add('active');
+                    } else {
+                        star.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Delete comment
+            window.deleteComment = async function(commentId) {
+                if (!confirm('Are you sure you want to delete this comment?')) return;
+                
+                try {
+                    const response = await fetch(`/api/blogs/${blogId}/comments/${commentId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${window.ContentCraft.Auth.getToken()}`
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        window.ContentCraft.Toast.success('Comment deleted');
+                        loadBlog();
+                    } else {
+                        window.ContentCraft.Toast.error(data.message || 'Failed to delete comment');
+                    }
+                } catch (error) {
+                    window.ContentCraft.Toast.error('Failed to delete comment');
+                }
+            };
+            
+            // Share functions
+            window.shareBlog = function(platform) {
+                const url = encodeURIComponent(window.location.href);
+                const title = encodeURIComponent(currentBlog?.title || 'Check out this blog');
+                
+                let shareUrl = '';
+                switch(platform) {
+                    case 'twitter':
+                        shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+                        break;
+                    case 'facebook':
+                        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                        break;
+                    case 'linkedin':
+                        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                        break;
+                }
+                
+                if (shareUrl) {
+                    window.open(shareUrl, '_blank', 'width=600,height=400');
+                }
+            };
+            
+            window.copyLink = function() {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    window.ContentCraft.Toast.success('Link copied to clipboard!');
+                });
+            };
+            
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+            
+            loadBlog();
+        });
+    </script>
+</body>
+</html>
