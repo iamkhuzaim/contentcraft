@@ -6,32 +6,52 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-// Database configuration
-const dbConfig = {
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'contentcraft',
-    port: process.env.DB_PORT || 3306,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-    enableKeepAlive: true,
-    keepAliveInitialDelay: 10000,
-    acquireTimeout: 60000,
-    timeout: 60000,
-    multipleStatements: true
-};
+let pool;
 
-// Create connection pool
-const pool = mysql.createPool(dbConfig);
+// Check if Railway provides MYSQL_PUBLIC_URL
+if (process.env.MYSQL_PUBLIC_URL) {
+    const url = new URL(process.env.MYSQL_PUBLIC_URL); // mysql://user:pass@host:port/db
+    pool = mysql.createPool({
+        host: url.hostname,
+        port: url.port || 3306,
+        user: url.username,
+        password: url.password,
+        database: url.pathname.replace('/', ''),
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0,
+        enableKeepAlive: true,
+        keepAliveInitialDelay: 10000,
+        acquireTimeout: 60000,
+        timeout: 60000,
+        multipleStatements: true
+    });
+} else {
+    // Local dev
+    pool = mysql.createPool({
+        host: process.env.DB_HOST || 'localhost',
+        user: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || '',
+        database: process.env.DB_NAME || 'contentcraft',
+        port: process.env.DB_PORT || 3306,
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0,
+        enableKeepAlive: true,
+        keepAliveInitialDelay: 10000,
+        acquireTimeout: 60000,
+        timeout: 60000,
+        multipleStatements: true
+    });
+}
 
 // Test connection
 const testConnection = async () => {
     try {
         const connection = await pool.getConnection();
-        console.log('Database connected successfully');
+        await connection.ping();
         connection.release();
+        console.log('Database connected successfully');
         return true;
     } catch (error) {
         console.error('Database connection failed:', error.message);
