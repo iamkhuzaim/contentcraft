@@ -1,16 +1,10 @@
-/**
- * ContentCraft Database Configuration
- * MySQL Connection Pool with optimized settings for scalability
- */
-
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 let pool;
 
-// Check if Railway provides MYSQL_PUBLIC_URL
 if (process.env.MYSQL_PUBLIC_URL) {
-    const url = new URL(process.env.MYSQL_PUBLIC_URL); // mysql://user:pass@host:port/db
+    const url = new URL(process.env.MYSQL_PUBLIC_URL);
     pool = mysql.createPool({
         host: url.hostname,
         port: url.port || 3306,
@@ -27,7 +21,6 @@ if (process.env.MYSQL_PUBLIC_URL) {
         multipleStatements: true
     });
 } else {
-    // Local dev
     pool = mysql.createPool({
         host: process.env.DB_HOST || 'localhost',
         user: process.env.DB_USER || 'root',
@@ -45,57 +38,16 @@ if (process.env.MYSQL_PUBLIC_URL) {
     });
 }
 
-// Test connection
 const testConnection = async () => {
     try {
-        const connection = await pool.getConnection();
-        await connection.ping();
-        connection.release();
-        console.log('Database connected successfully');
+        const conn = await pool.getConnection();
+        await conn.ping();
+        conn.release();
         return true;
-    } catch (error) {
-        console.error('Database connection failed:', error.message);
+    } catch (err) {
+        console.error('DB connection failed:', err.message);
         return false;
     }
 };
 
-// Query helper with error handling
-const query = async (sql, params) => {
-    try {
-        const [results] = await pool.query(sql, params || []);
-        return results;
-    } catch (error) {
-        console.error('Database query error:', error.message);
-        console.error('   SQL:', sql.substring(0, 200));
-        console.error('   Params:', params);
-        if (error.code === 'ER_NO_SUCH_TABLE') {
-            console.error('   Table does not exist. Run: npm run init-db');
-        } else if (error.code === 'ER_BAD_DB_ERROR') {
-            console.error('   Database does not exist. Run: npm run init-db');
-        }
-        throw error;
-    }
-};
-
-// Transaction helper
-const transaction = async (callback) => {
-    const connection = await pool.getConnection();
-    try {
-        await connection.beginTransaction();
-        const result = await callback(connection);
-        await connection.commit();
-        return result;
-    } catch (error) {
-        await connection.rollback();
-        throw error;
-    } finally {
-        connection.release();
-    }
-};
-
-module.exports = {
-    pool,
-    query,
-    transaction,
-    testConnection
-};
+module.exports = { pool, testConnection };
